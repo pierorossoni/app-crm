@@ -232,6 +232,7 @@ export const Applications: React.FC<ApplicationsProps> = ({
                                             <option value="VS Code">VS Code</option>
                                             <option value="Antigravity">Antigravity</option>
                                             <option value="Claude Desk">Claude Desk</option>
+                                            <option value="Google-Studi">Google-Studi</option>
                                             <option value="Altro">Altro</option>
                                         </select>
                                     </div>
