@@ -3,6 +3,7 @@ import { Plus, Edit2, Trash2, ExternalLink, Filter } from 'lucide-react';
 
 export interface Application {
     id: string;
+    created_at: string;
     name: string;
     system: string;
     has_database: boolean;
@@ -150,7 +151,11 @@ export const Applications: React.FC<ApplicationsProps> = ({
                             <th>Nome</th>
                             <th>Tecnologia</th>
                             <th>DB Collegato</th>
+                            <th>Posizione DB</th>
+                            <th>URL Online</th>
                             <th>Hosting</th>
+                            <th>Note</th>
+                            <th>Creato il</th>
                             <th>Stato</th>
                             <th>Azioni</th>
                         </tr>
@@ -161,7 +166,11 @@ export const Applications: React.FC<ApplicationsProps> = ({
                                 <td style={{ fontWeight: 600 }}>{getEmoji(app.system)} {app.name}</td>
                                 <td>{app.system}</td>
                                 <td>{app.has_database ? `Sì (${app.database_type})` : 'No'}</td>
+                                <td>{app.database_location || '-'}</td>
+                                <td>{app.online_url ? <a href={app.online_url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>{app.online_url}</a> : '-'}</td>
                                 <td>{app.hosting_location || '-'}</td>
+                                <td>{app.notes ? app.notes.length > 50 ? `${app.notes.substring(0, 50)}...` : app.notes : '-'}</td>
+                                <td>{new Date(app.created_at).toLocaleDateString('it-IT')}</td>
                                 <td>
                                     <span className={`status-badge ${getStatusClass(app.status)}`}>
                                         {app.status === 'Active' ? 'Attiva' :
@@ -188,7 +197,7 @@ export const Applications: React.FC<ApplicationsProps> = ({
                         ))}
                         {filteredApps.length === 0 && (
                             <tr>
-                                <td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                                <td colSpan={10} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
                                     Nessuna applicazione trovata.
                                 </td>
                             </tr>
