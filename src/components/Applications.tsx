@@ -152,10 +152,10 @@ export const Applications: React.FC<ApplicationsProps> = ({
                             <th>Tecnologia</th>
                             <th>DB Collegato</th>
                             <th>Posizione DB</th>
-                            <th>URL Online</th>
-                            <th>Hosting</th>
-                            <th>Note</th>
-                            <th>Creato il</th>
+                            <th style={{ width: '60px' }}>URL Online</th>
+                            <th style={{ width: '60px' }}>Hosting</th>
+                            <th style={{ width: '60px' }}>Note</th>
+                            <th style={{ width: '80px' }}>Creato il</th>
                             <th>Stato</th>
                             <th>Azioni</th>
                         </tr>
@@ -167,10 +167,10 @@ export const Applications: React.FC<ApplicationsProps> = ({
                                 <td>{app.system}</td>
                                 <td>{app.has_database ? `Sì (${app.database_type})` : 'No'}</td>
                                 <td>{app.database_location || '-'}</td>
-                                <td>{app.online_url ? <a href={app.online_url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>{app.online_url}</a> : '-'}</td>
-                                <td>{app.hosting_location || '-'}</td>
-                                <td>{app.notes ? app.notes.length > 50 ? `${app.notes.substring(0, 50)}...` : app.notes : '-'}</td>
-                                <td>{new Date(app.created_at).toLocaleDateString('it-IT')}</td>
+                                <td style={{ textAlign: 'center' }}>{app.online_url ? <a href={app.online_url} target="_blank" rel="noopener noreferrer" title={app.online_url}>🌐</a> : '-'}</td>
+                                <td style={{ textAlign: 'center' }}>{app.hosting_location ? <span title={app.hosting_location}>🏠</span> : '-'}</td>
+                                <td style={{ textAlign: 'center' }}>{app.notes ? <span title={app.notes}>📝</span> : '-'}</td>
+                                <td style={{ textAlign: 'center' }}><span title={new Date(app.created_at).toLocaleString('it-IT')}>📅</span></td>
                                 <td>
                                     <span className={`status-badge ${getStatusClass(app.status)}`}>
                                         {app.status === 'Active' ? 'Attiva' :
@@ -222,10 +222,18 @@ export const Applications: React.FC<ApplicationsProps> = ({
                                     </div>
                                     <div className="form-group">
                                         <label>Sistema/Tecnologia</label>
-                                        <input
-                                            type="text" className="form-control" required placeholder="Es. React, Laravel"
+                                        <select
+                                            className="form-control" required
                                             value={formData.system} onChange={e => setFormData({ ...formData, system: e.target.value })}
-                                        />
+                                        >
+                                            <option value="">Seleziona...</option>
+                                            <option value="Lovable">Lovable</option>
+                                            <option value="Bolt">Bolt</option>
+                                            <option value="VS Code">VS Code</option>
+                                            <option value="Antigravity">Antigravity</option>
+                                            <option value="Claude Desk">Claude Desk</option>
+                                            <option value="Altro">Altro</option>
+                                        </select>
                                     </div>
                                 </div>
 
