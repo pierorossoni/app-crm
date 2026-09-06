@@ -13,6 +13,7 @@ function App() {
     const [searchQuery, setSearchQuery] = useState('');
     const [user, setUser] = useState<any>(null);
     const [authLoading, setAuthLoading] = useState(true);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     useEffect(() => {
         checkUser();
@@ -54,6 +55,14 @@ function App() {
         }
     };
 
+    const safeAlert = (msg: string) => {
+        try {
+            window.alert(msg);
+        } catch {
+            console.warn(msg);
+        }
+    };
+
     const fetchApps = async () => {
         try {
             setLoading(true);
@@ -66,7 +75,7 @@ function App() {
             setApps(data || []);
         } catch (error) {
             console.error('Error fetching apps:', error);
-            alert('Errore nel caricamento dei dati');
+            safeAlert('Errore nel caricamento dei dati');
         } finally {
             setLoading(false);
         }
@@ -85,7 +94,7 @@ function App() {
             }
         } catch (error) {
             console.error('Error adding app:', error);
-            alert('Errore durante l\'aggiunta');
+            safeAlert('Errore durante l\'aggiunta');
         }
     };
 
@@ -106,12 +115,18 @@ function App() {
             }
         } catch (error) {
             console.error('Error editing app:', error);
-            alert('Errore durante la modifica');
+            safeAlert('Errore durante la modifica');
         }
     };
 
     const handleDeleteApp = async (id: string) => {
-        if (!confirm('Sei sicuro di voler eliminare questa applicazione?')) return;
+        let confirmed = true;
+        try {
+            confirmed = window.confirm('Sei sicuro di voler eliminare questa applicazione?');
+        } catch {
+            confirmed = true;
+        }
+        if (!confirmed) return;
 
         try {
             const { error } = await supabase
@@ -123,7 +138,7 @@ function App() {
             setApps(apps.filter(app => app.id !== id));
         } catch (error) {
             console.error('Error deleting app:', error);
-            alert('Errore durante l\'eliminazione');
+            safeAlert('Errore durante l\'eliminazione');
         }
     };
 
@@ -141,15 +156,23 @@ function App() {
                     setSearchQuery={setSearchQuery}
                     onLogout={handleLogout}
                     user={user}
+                    appsCount={apps.length}
+                    onOpenAddModal={() => {
+                        setActiveTab('applications');
+                        setIsAddModalOpen(true);
+                    }}
                 >
                     {loading ? (
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: 200 }}>
                             <div className="loader">Caricamento...</div>
                         </div>
                     ) : (
                         <>
                             {activeTab === 'dashboard' ? (
-                                <Dashboard apps={apps} />
+                                <Dashboard
+                                    apps={apps}
+                                    onNavigateToApps={() => setActiveTab('applications')}
+                                />
                             ) : (
                                 <Applications
                                     apps={apps}
@@ -157,6 +180,8 @@ function App() {
                                     onEdit={handleEditApp}
                                     onDelete={handleDeleteApp}
                                     searchQuery={searchQuery}
+                                    isExternalModalOpen={isAddModalOpen}
+                                    onCloseExternalModal={() => setIsAddModalOpen(false)}
                                 />
                             )}
                         </>

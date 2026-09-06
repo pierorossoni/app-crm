@@ -1,0 +1,6 @@
+{
+  "name": "App CRM",
+  "description": "CRM dashboard and management application for tracking applications, cloud systems, databases, and hosting infrastructure.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
